@@ -9,53 +9,65 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController t1 = TextEditingController();
-  List myToDo = [];
+  List myToDo = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   addItem() {
     myToDo.add(t1.text);
     setState(() {});
   }
 
-  removeItem() {
-    myToDo.remove(t1.text);
+  removeItem(int index) {
+    myToDo.removeAt(index);
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    Size deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-      body: Center(
+      appBar: AppBar(
+        title: const Text('My To Do List'),
+        centerTitle: true,
+        elevation: 20,
+      ),
+      body: Container(
+        margin: const EdgeInsets.all(10),
         child: Column(
           children: [
-            ListView.builder(
-              itemCount: myToDo.length,
-              itemBuilder: (context, index) => const ListTile(
-                title: Text('data'),
-              ),
+            const Text('data'),
+            Flexible(
+              flex: 5,
+              child: ListView.builder(
+                  itemCount: myToDo.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return SingleChildScrollView(
+                      child: ListTile(
+                        leading: const Icon(Icons.list),
+                        title: Text("$myToDo[index]".toString()),
+                        subtitle: Text('Index: $index'),
+                        trailing: InkWell(
+                          child: const Icon(Icons.remove),
+                          onTap: removeItem(index),
+                        ),
+                      ),
+                    );
+                  }),
             ),
-            TextField(
-              controller: t1,
-              decoration: const InputDecoration(
-                hintText: 'What are you add to do list?',
+            Flexible(
+              flex: 1,
+              child: TextField(
+                controller: t1,
+                decoration: const InputDecoration(
+                  hintText: 'What are you add to do list?',
+                ),
               ),
-            ),
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed: addItem,
-                  child: const Text('Add Item'),
-                ),
-                const SizedBox(
-                  width: double.infinity,
-                ),
-                ElevatedButton(
-                  onPressed: removeItem,
-                  child: const Text('Remove Item'),
-                ),
-              ],
             )
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: addItem,
       ),
     );
   }
