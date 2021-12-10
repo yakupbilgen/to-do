@@ -34,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
         margin: const EdgeInsets.all(10),
         child: Column(
           children: [
-            const Text('data'),
             Flexible(
               flex: 5,
               child: ListView.builder(
