@@ -23,7 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: const Text('My To Do List'),
@@ -32,42 +31,52 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Container(
         margin: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Flexible(
-              flex: 5,
-              child: ListView.builder(
-                  itemCount: myToDo.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return SingleChildScrollView(
-                      child: ListTile(
-                        leading: const Icon(Icons.list),
-                        title: Text("$myToDo[index]".toString()),
-                        subtitle: Text('Index: $index'),
-                        trailing: InkWell(
-                          child: const Icon(Icons.remove),
-                          onTap: removeItem(index),
-                        ),
-                      ),
-                    );
-                  }),
-            ),
-            Flexible(
-              flex: 1,
-              child: TextField(
-                controller: t1,
-                decoration: const InputDecoration(
-                  hintText: 'What are you add to do list?',
+        child: ListView.builder(
+            itemCount: myToDo.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                leading: const Icon(Icons.list),
+                title: Text("${myToDo[index]}"),
+                subtitle: Text('Index: $index'),
+                trailing: InkWell(
+                  child: const Icon(Icons.remove),
+                  onTap: () {},
                 ),
-              ),
-            )
-          ],
-        ),
+              );
+            }),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: addItem,
+        onPressed: _showMyDialog,
       ),
+    );
+  }
+
+  _showMyDialog() {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Add to do list'),
+          content: const TextField(),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Add'),
+              onPressed: () {
+                addItem();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
